@@ -1,7 +1,7 @@
 CFLAGS ?= -W -Wall -Wextra -Werror -Wundef -Wdouble-promotion \
           -Wformat-truncation -fno-common -Wconversion
 DEBUGFLAGS ?= -g -O0 -fsanitize=address
-SOURCES = main.c
+SOURCES = main.c arena.c str.c
 
 build: arena.out
 
