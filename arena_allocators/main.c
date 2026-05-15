@@ -26,7 +26,7 @@ Arena *arena_create(size_t size) {
     return arena;
 }
 
-void *arena_push(Arena *arena, size_t size) {
+void *arena_alloc(Arena *arena, size_t size) {
     size_t alignment = _Alignof(max_align_t);
     size_t aligned_offset = (arena->offset + alignment - 1) & ~(alignment - 1);
     if (size <= arena->length - aligned_offset) {
@@ -52,14 +52,14 @@ typedef struct {
     size_t len;
 } String;
 
-#define string_from_literal(a, s) _new_string(a, s, sizeof(s) - 1)
-#define string(a, s) _new_string(a, s, strlen(s))
+#define string_from_literal(a, s) _string_create(a, s, sizeof(s) - 1)
+#define string(a, s) _string_create(a, s, strlen(s))
 
-String *_new_string(Arena *arena, const char *val, size_t len) {
-    String *str = arena_push(arena, sizeof(String));
+String *_string_create(Arena *arena, const char *val, size_t len) {
+    String *str = arena_alloc(arena, sizeof(String));
     if (!str) return NULL;
 
-    str->val = arena_push(arena, len);
+    str->val = arena_alloc(arena, len);
     if (!str->val) return NULL;
 
     memcpy(str->val, val, len);
@@ -86,7 +86,7 @@ int main(void) {
     size_t prev_offset = arena->offset;
 
     size_t arr1_len = 256;
-    uint8_t *arr1 = arena_push(arena, arr1_len);
+    uint8_t *arr1 = arena_alloc(arena, arr1_len);
     if (arr1) {
         printf("arr[0]: %d, arr[%zu]: %d\n", arr1[0], arr1_len - 1, arr1[arr1_len - 1]);
     }
@@ -94,7 +94,7 @@ int main(void) {
     printf("allocation from %zu to %zu, curr offset: %zu\n\n", prev_offset, prev_offset + arr1_len, arena->offset);
 
     prev_offset = arena->offset;
-    char *str1 = arena_push(arena, 64);
+    char *str1 = arena_alloc(arena, 64);
     if (str1) {
         char *str1_src = "Hello";
         strncpy(str1, str1_src, strlen(str1_src));
