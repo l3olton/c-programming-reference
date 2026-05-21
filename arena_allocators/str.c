@@ -17,10 +17,6 @@ String *_string_create(Arena *arena, const char *val, size_t len) {
     return str;
 }
 
-String *string_from_literal(Arena *arena, const char *str) {
-    return _string_create(arena, str, sizeof(str) - 1);
-}
-
 String *string(Arena *arena, const char *str) {
     return _string_create(arena, str, strlen(str));
 }
