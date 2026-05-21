@@ -14,4 +14,4 @@ arena.debug: $(SOURCES)
 	gcc $(SOURCES) $(CFLAGS) $(DEBUGFLAGS) -o $@
 
 clean:
-	rm -rf arena.*
+	rm -rf *.out *.debug
