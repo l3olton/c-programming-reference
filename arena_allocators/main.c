@@ -96,7 +96,11 @@ void do_things(Arena arena) {
 
     printf("Enter some text: ");
     char temp[64];
-    fgets(temp, 64, stdin); // TODO: check for error and remove newline
+    if (fgets(temp, 64, stdin) == NULL) {
+        printf("Error reading stdin\n");
+    } else {
+        temp[strcspn(temp, "\n")] = '\0';
+    }
 
     prev_offset = arena.offset;
     String *str2 = string(&arena, temp);
