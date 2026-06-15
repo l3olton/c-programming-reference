@@ -34,6 +34,10 @@ int main(void)
     e &=        0b00011000;
     //            00010000
 
+    uint8_t f = 0b00110011
+              & 0b00011000;
+    //            00010000
+
     printf(" a: %b = %d\n", a, a);
     printf("a0: %b = %d\n", a0, a0);
     printf(" b: %b = %d\n", b, b);
@@ -41,6 +45,7 @@ int main(void)
     printf(" c: %b = %d\n", c, c);
     printf(" d: %b = %d\n", d, d);
     printf(" e: %b = %d\n", e, e);
+    printf(" f: %b = %d\n", f, f);
 
     return 0;
 }
