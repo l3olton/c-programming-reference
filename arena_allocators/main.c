@@ -64,6 +64,7 @@ void do_things(Arena arena) {
 
     size_t arr1_len = 256;
     uint8_t *arr1 = arena_alloc(&arena, arr1_len);
+    // TODO: prevent writing past end of array
     if (arr1) {
         printf("arr[0]: %d, arr[%zu]: %d\n", arr1[0], arr1_len - 1, arr1[arr1_len - 1]);
     }
