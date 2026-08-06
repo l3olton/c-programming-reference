@@ -9,7 +9,7 @@ typedef struct {
     uint8_t *data;
     size_t write_index;
     size_t read_index;
-    size_t max;
+    size_t size;
 } RingBuffer;
 
 
