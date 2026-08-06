@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
-String *_string_create(Arena *arena, const char *val, size_t len) {
+String *_string_create(Arena *arena, const char *val, size_t len)
+{
     String *str = arena_alloc(arena, sizeof(String));
     if (!str) return NULL;
 
@@ -17,11 +18,13 @@ String *_string_create(Arena *arena, const char *val, size_t len) {
     return str;
 }
 
-String *string(Arena *arena, const char *str) {
+String *string(Arena *arena, const char *str)
+{
     return _string_create(arena, str, strlen(str));
 }
 
-void print_string(const String *str) {
+void print_string(const String *str)
+{
     for (size_t i = 0; i < str->len; ++i) {
         printf("%c", str->val[i]);
     }

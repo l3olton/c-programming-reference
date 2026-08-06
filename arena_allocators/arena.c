@@ -4,7 +4,8 @@
 #include <string.h>
 #include <stdbool.h>
 
-Arena *arena_create(const size_t size) {
+Arena *arena_create(const size_t size)
+{
     Arena *arena = malloc(sizeof(Arena));
     if (!arena) return NULL;
 
@@ -21,7 +22,8 @@ Arena *arena_create(const size_t size) {
     return arena;
 }
 
-bool arena_init(Arena *arena, uint8_t *buffer, const size_t size) {
+bool arena_init(Arena *arena, uint8_t *buffer, const size_t size)
+{
     if (arena == NULL || buffer == NULL || size == 0)
         return false;
 
@@ -33,7 +35,8 @@ bool arena_init(Arena *arena, uint8_t *buffer, const size_t size) {
     return true;
 }
 
-void *arena_alloc(Arena *arena, const size_t size) {
+void *arena_alloc(Arena *arena, const size_t size)
+{
     size_t alignment = _Alignof(max_align_t);
     size_t aligned_offset = (arena->offset + alignment - 1) & ~(alignment - 1);
     if (size <= arena->length - aligned_offset) {
@@ -45,11 +48,13 @@ void *arena_alloc(Arena *arena, const size_t size) {
     return NULL;
 }
 
-void arena_reset(Arena *arena) {
+void arena_reset(Arena *arena)
+{
     arena->offset = 0;
 }
 
-void arena_free(Arena *arena) {
+void arena_free(Arena *arena)
+{
     if (arena->dynamic_mem) {
         free(arena->buffer);
         free(arena);

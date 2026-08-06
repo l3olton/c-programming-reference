@@ -6,7 +6,8 @@
 
 void do_things(Arena arena);
 
-int main(void) {
+int main(void)
+{
     // ====== arena_create creates arena and dynamically allocates its memory ======
 
     Arena *arena1 = arena_create(1024);
@@ -56,7 +57,8 @@ int main(void) {
     return 0;
 }
 
-void do_things(Arena arena) {
+void do_things(Arena arena)
+{
     printf("buffer start addr: %p, buffer end addr: %p\n", arena.buffer, arena.buffer + arena.length);
     printf("length: %zu, offset: %zu\n\n", arena.length, arena.offset);
 
