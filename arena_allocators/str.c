@@ -26,7 +26,7 @@ String *string(Arena *arena, const char *str)
 void print_string(const String *str)
 {
     for (size_t i = 0; i < str->len; ++i) {
-        printf("%c", str->val[i]);
+        putchar(str->val[i]);
     }
 }
 
