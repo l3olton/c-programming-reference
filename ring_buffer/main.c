@@ -43,5 +43,5 @@ int main(void)
     ring_buf_visualize(&rb);
     putchar('\n');
 
-    return 1;
+    return 0;
 }
