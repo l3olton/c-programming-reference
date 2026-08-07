@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 typedef struct {
-    uint8_t *data;
+    uint8_t *buffer;
     size_t write_index;
     size_t read_index;
     size_t size;
