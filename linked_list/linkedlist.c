@@ -7,7 +7,7 @@
 
 bool linked_list_init(Arena *allocator, LinkedListNode *list, uint8_t value)
 {
-    if (list == NULL) return false;
+    if (allocator == NULL || list == NULL) return false;
     list->value = value;
     list->next = NULL;
     list->allocator = allocator;
