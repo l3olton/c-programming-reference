@@ -49,6 +49,14 @@ int main(void)
 
     visualize_list(&list);
 
+    if (linked_list_update(&list, 4, 12))
+        printf("item at index 4 updated\n");
+
+    if (!linked_list_update(&list, 10, 20))
+        printf("index 10 out of bounds\n");
+
+    visualize_list(&list);
+
     return 0;
 }
 

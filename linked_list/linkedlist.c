@@ -50,6 +50,16 @@ bool linked_list_get(const LinkedList *list, size_t index, uint8_t *out)
     return true;
 }
 
+bool linked_list_update(const LinkedList *list, size_t index, uint8_t value)
+{
+    if (list == NULL || list->values == NULL) return false;
+    if (index > list->size - 1) return false;
+    LinkedListNode *node = linked_list_get_node(list, index);
+    if (node == NULL) return false;
+    node->value = value;
+    return true;
+}
+
 bool linked_list_delete(LinkedList *list, size_t index)
 {
     if (list == NULL || list->values == NULL) return false;
