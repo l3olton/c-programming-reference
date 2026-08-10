@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+void visualize_list(const LinkedList *list);
+
 int main(void)
 {
     Arena allocator = {0};
@@ -23,20 +25,15 @@ int main(void)
             printf("Error pushing to linked list\n");
             return 1;
         }
+        visualize_list(&list);
     }
 
-    for (LinkedListNode *node = list.values; node != NULL; node = node->next)
-        printf("%d ", node->value);
-    putchar('\n');
+    visualize_list(&list);
 
     LinkedListNode *third_node = linked_list_get(&list, 2);
     printf("3rd node value: %d\n", third_node->value);
 
-    for (LinkedListNode *node = list.values; node != NULL; node = node->next)
-        printf("%d ", node->value);
-    putchar('\n');
-
-    LinkedListNode *third = linked_list_get(&list, 2);
+    visualize_list(&list);
 
     if (!linked_list_delete(&list, 2))
         printf("Error deleting 3rd item from list\n");
@@ -45,12 +42,18 @@ int main(void)
     if (!linked_list_delete(&list, 0))
         printf("Error deleting 1st item from list\n");
 
-    for (LinkedListNode *node = list.values; node != NULL; node = node->next)
-        printf("%d ", node->value);
-    putchar('\n');
+    visualize_list(&list);
 
-    printf("orphaned 3rd: %d\n", third->value);
-    if (!third->next) printf("deleted 3rd node next = NULL\n");
+    printf("orphaned 3rd: %d\n", third_node->value);
+    if (!third_node->next) printf("deleted 3rd node next = NULL\n");
 
     return 0;
+}
+
+void visualize_list(const LinkedList *list)
+{
+    // TODO: create abstraction for iterating
+    for (LinkedListNode *node = list->values; node != NULL; node = node->next)
+        printf("%d ", node->value);
+    printf("\nsize: %zu\n\n", list->size);
 }
