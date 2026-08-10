@@ -5,46 +5,54 @@
 #include <stdio.h>
 #include <string.h>
 
-bool linked_list_init(Arena *allocator, LinkedListNode *list, uint8_t value)
+bool linked_list_init(Arena *allocator, LinkedList *list, uint8_t value)
 {
     if (allocator == NULL || list == NULL) return false;
-    list->value = value;
-    list->next = NULL;
     list->allocator = allocator;
+    list->values = arena_alloc(list->allocator, sizeof(LinkedListNode));
+    list->values->value = value;
+    list->values->next = NULL;
     return true;
 }
 
-bool linked_list_push(LinkedListNode *list, uint8_t value)
+bool linked_list_push(const LinkedList *list, uint8_t value)
 {
-    if (list == NULL) return false;
+    if (list == NULL || list->values == NULL) return false;
 
-    LinkedListNode *node = arena_alloc(list->allocator, sizeof(LinkedListNode));
-    linked_list_init(list->allocator, node, value);
-
-    LinkedListNode *last = NULL;
-    for (last = list; last->next != NULL; last = last->next);
-    last->next = node;
+    LinkedListNode *new_node = arena_alloc(list->allocator, sizeof(LinkedListNode));
+    if (new_node == NULL) return false; // TODO: handle better
+    new_node->value = value;
+    new_node->next = NULL;
+    
+    LinkedListNode *last = list->values;
+    while (last->next != NULL) last = last->next;
+    last->next = new_node;
 
     return true;
 }
 
-LinkedListNode *linked_list_get_node(LinkedListNode *node, size_t index)
+LinkedListNode *linked_list_get(const LinkedList *list, size_t index)
 {
-    if (node == NULL) return NULL;
+    if (list == NULL || list->values == NULL) return NULL;
     // TODO: check index
-
+    LinkedListNode *node = list->values;
     while (index--) node = node->next;
     return node;
 }
 
-bool linked_list_delete(LinkedListNode *list, size_t index)
+bool linked_list_delete(LinkedList *list, size_t index)
 {
-    if (list == NULL) return false;
+    if (list == NULL || list->values == NULL) return false;
+    if (index == 0) {
+        list->values = list->values->next;
+        return true;
+    }
     // TODO: check index
-    // TODO: handle first item
-    LinkedListNode *prev_node = linked_list_get_node(list, index - 1);
+    LinkedListNode *prev_node = linked_list_get(list, index - 1);
     if (prev_node == NULL) return false;
 
+    LinkedListNode *deleted_node = prev_node->next;
     prev_node->next = prev_node->next->next;
+    deleted_node->next = NULL;
     return true;
 }

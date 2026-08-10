@@ -12,7 +12,7 @@ int main(void)
         return 1;
     }
 
-    LinkedListNode list = {0};
+    LinkedList list = {0};
     if (!linked_list_init(&allocator, &list, 1)) {
         printf("Error initializing linked list\n");
         return 1;
@@ -25,25 +25,32 @@ int main(void)
         }
     }
 
-    for (LinkedListNode *node = &list; node != NULL; node = node->next)
+    for (LinkedListNode *node = list.values; node != NULL; node = node->next)
         printf("%d ", node->value);
     putchar('\n');
 
-    LinkedListNode *third_node = linked_list_get_node(&list, 2);
+    LinkedListNode *third_node = linked_list_get(&list, 2);
     printf("3rd node value: %d\n", third_node->value);
 
-    for (LinkedListNode *node = &list; node != NULL; node = node->next)
+    for (LinkedListNode *node = list.values; node != NULL; node = node->next)
         printf("%d ", node->value);
     putchar('\n');
+
+    LinkedListNode *third = linked_list_get(&list, 2);
 
     if (!linked_list_delete(&list, 2))
         printf("Error deleting 3rd item from list\n");
     if (!linked_list_delete(&list, 7))
         printf("Error deleting 8th item from list\n");
+    if (!linked_list_delete(&list, 0))
+        printf("Error deleting 1st item from list\n");
 
-    for (LinkedListNode *node = &list; node != NULL; node = node->next)
+    for (LinkedListNode *node = list.values; node != NULL; node = node->next)
         printf("%d ", node->value);
     putchar('\n');
+
+    printf("orphaned 3rd: %d\n", third->value);
+    if (!third->next) printf("deleted 3rd node next = NULL\n");
 
     return 0;
 }
