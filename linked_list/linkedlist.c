@@ -33,13 +33,20 @@ bool linked_list_push(LinkedList *list, uint8_t value)
     return true;
 }
 
-LinkedListNode *linked_list_get(const LinkedList *list, size_t index)
+LinkedListNode *linked_list_get_node(const LinkedList *list, size_t index)
 {
     if (list == NULL || list->values == NULL) return NULL;
     if (index > list->size - 1) return NULL;
     LinkedListNode *node = list->values;
     while (index--) node = node->next;
     return node;
+}
+
+uint8_t *linked_list_get(const LinkedList *list, size_t index)
+{
+    LinkedListNode *node = linked_list_get_node(list, index);
+    if (node == NULL) return NULL;
+    return &node->value;
 }
 
 bool linked_list_delete(LinkedList *list, size_t index)
@@ -51,7 +58,7 @@ bool linked_list_delete(LinkedList *list, size_t index)
         list->size--;
         return true;
     }
-    LinkedListNode *prev_node = linked_list_get(list, index - 1);
+    LinkedListNode *prev_node = linked_list_get_node(list, index - 1);
     if (prev_node == NULL) return false;
 
     LinkedListNode *deleted_node = prev_node->next;

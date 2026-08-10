@@ -20,7 +20,7 @@ bool linked_list_init(Arena *allocator, LinkedList *list, uint8_t value);
 
 bool linked_list_push(LinkedList *list, uint8_t value);
 
-LinkedListNode *linked_list_get(const LinkedList *list, size_t index);
+uint8_t *linked_list_get(const LinkedList *list, size_t index);
 
 bool linked_list_delete(LinkedList *list, size_t index);
 

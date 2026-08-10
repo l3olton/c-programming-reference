@@ -30,8 +30,11 @@ int main(void)
 
     visualize_list(&list);
 
-    LinkedListNode *third_node = linked_list_get(&list, 2);
-    printf("3rd node value: %d\n", third_node->value);
+    uint8_t *val3 = linked_list_get(&list, 2);
+    if (val3) printf("3rd node value: %d\n", *val3);
+
+    uint8_t *val20 = linked_list_get(&list, 20);
+    if (!val20) printf("index 20 is out of bounds\n");
 
     visualize_list(&list);
 
@@ -43,9 +46,6 @@ int main(void)
         printf("Error deleting 1st item from list\n");
 
     visualize_list(&list);
-
-    printf("orphaned 3rd: %d\n", third_node->value);
-    if (!third_node->next) printf("deleted 3rd node next = NULL\n");
 
     return 0;
 }
