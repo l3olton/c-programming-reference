@@ -42,11 +42,12 @@ LinkedListNode *linked_list_get_node(const LinkedList *list, size_t index)
     return node;
 }
 
-uint8_t *linked_list_get(const LinkedList *list, size_t index)
+bool linked_list_get(const LinkedList *list, size_t index, uint8_t *out)
 {
     LinkedListNode *node = linked_list_get_node(list, index);
-    if (node == NULL) return NULL;
-    return &node->value;
+    if (node == NULL) return false;
+    *out = node->value;
+    return true;
 }
 
 bool linked_list_delete(LinkedList *list, size_t index)

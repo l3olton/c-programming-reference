@@ -30,11 +30,13 @@ int main(void)
 
     visualize_list(&list);
 
-    uint8_t *val3 = linked_list_get(&list, 2);
-    if (val3) printf("3rd node value: %d\n", *val3);
+    uint8_t val3;
+    bool success = linked_list_get(&list, 2, &val3);
+    if (success) printf("3rd node value: %d\n", val3);
 
-    uint8_t *val20 = linked_list_get(&list, 20);
-    if (!val20) printf("index 20 is out of bounds\n");
+    uint8_t val20;
+    success = linked_list_get(&list, 20, &val20);
+    if (!success) printf("index 20 is out of bounds\n");
 
     visualize_list(&list);
 
