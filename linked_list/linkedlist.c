@@ -28,19 +28,23 @@ bool linked_list_push(LinkedListNode *list, uint8_t value)
     return true;
 }
 
-bool linked_list_get_val(LinkedListNode *list, size_t index, uint8_t *output)
+LinkedListNode *linked_list_get_node(LinkedListNode *node, size_t index)
 {
-    if (list == NULL || output == NULL) return false;
-    LinkedListNode *node = list;
+    if (node == NULL) return NULL;
+    // TODO: check index
+
     while (index--) node = node->next;
-    *output = node->value;
-    return true;
+    return node;
 }
 
-bool linked_list_get_node(LinkedListNode *list, size_t index, LinkedListNode *output)
+bool linked_list_delete(LinkedListNode *list, size_t index)
 {
-    if (list == NULL || output == NULL) return false;
-    *output = *list;
-    while (index--) *output = *output->next;
+    if (list == NULL) return false;
+    // TODO: check index
+    // TODO: handle first item
+    LinkedListNode *prev_node = linked_list_get_node(list, index - 1);
+    if (prev_node == NULL) return false;
+
+    prev_node->next = prev_node->next->next;
     return true;
 }

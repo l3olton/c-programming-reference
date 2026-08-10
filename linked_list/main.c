@@ -29,13 +29,17 @@ int main(void)
         printf("%d ", node->value);
     putchar('\n');
 
-    uint8_t val_output;
-    linked_list_get_val(&list, 2, &val_output);
-    printf("%d\n", val_output);
+    LinkedListNode *third_node = linked_list_get_node(&list, 2);
+    printf("3rd node value: %d\n", third_node->value);
 
-    LinkedListNode node_output;
-    linked_list_get_node(&list, 2, &node_output);
-    printf("%d\n", node_output.value);
+    for (LinkedListNode *node = &list; node != NULL; node = node->next)
+        printf("%d ", node->value);
+    putchar('\n');
+
+    if (!linked_list_delete(&list, 2))
+        printf("Error deleting 3rd item from list\n");
+    if (!linked_list_delete(&list, 7))
+        printf("Error deleting 8th item from list\n");
 
     for (LinkedListNode *node = &list; node != NULL; node = node->next)
         printf("%d ", node->value);
