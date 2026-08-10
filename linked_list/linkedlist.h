@@ -18,7 +18,7 @@ typedef struct {
 
 bool linked_list_init(Arena *allocator, LinkedList *list, uint8_t value);
 
-bool linked_list_push(const LinkedList *list, uint8_t value);
+bool linked_list_push(LinkedList *list, uint8_t value);
 
 LinkedListNode *linked_list_get(const LinkedList *list, size_t index);
 
