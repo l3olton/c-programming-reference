@@ -26,6 +26,7 @@ LinkedList *linked_list_new(Arena *allocator, uint8_t value)
 
     list->allocator = allocator;
 
+    // TODO: maybe initialize without any nodes
     list->values = arena_alloc(list->allocator, sizeof(LinkedListNode));
     if (list->values == NULL) {
         list = NULL;
@@ -53,6 +54,23 @@ bool linked_list_push(LinkedList *list, uint8_t value)
     last->next = new_node;
 
     list->size++;
+    return true;
+}
+
+bool linked_list_prepend(LinkedList *list, uint8_t value)
+{
+    if (list == NULL || list->values == NULL) return false;
+
+    LinkedListNode *new_node = arena_alloc(list->allocator, sizeof(LinkedListNode));
+    if (new_node == NULL) return false;
+
+    LinkedListNode *first = list->values;
+    new_node->next = first;
+    new_node->value = value;
+
+    list->values = new_node;
+    list->size++;
+
     return true;
 }
 

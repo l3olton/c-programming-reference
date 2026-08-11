@@ -55,5 +55,9 @@ int main(void)
 
     linked_list_visualize(list);
 
+    if (!linked_list_prepend(list, 1)) printf("Error prepending to list\n");
+
+    linked_list_visualize(list);
+
     return 0;
 }

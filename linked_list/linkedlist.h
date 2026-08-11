@@ -12,6 +12,8 @@ LinkedList *linked_list_new(Arena *allocator, uint8_t value);
 
 bool linked_list_push(LinkedList *list, uint8_t value);
 
+bool linked_list_prepend(LinkedList *list, uint8_t value);
+
 bool linked_list_get(const LinkedList *list, size_t index, uint8_t *out);
 
 bool linked_list_update(const LinkedList *list, size_t index, uint8_t value);
