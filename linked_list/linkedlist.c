@@ -5,15 +5,38 @@
 #include <stdio.h>
 #include <string.h>
 
-bool linked_list_init(Arena *allocator, LinkedList *list, uint8_t value)
+struct LinkedListNode_s {
+    // TODO: make generic
+    uint8_t value;
+    LinkedListNode *next;
+};
+
+struct LinkedList_s {
+    Arena *allocator;
+    LinkedListNode *values;
+    size_t size;
+};
+
+LinkedList *linked_list_new(Arena *allocator, uint8_t value)
 {
-    if (allocator == NULL || list == NULL) return false;
+    if (allocator == NULL) return NULL;
+
+    LinkedList *list = arena_alloc(allocator, sizeof(LinkedList));
+    if (list == NULL) return NULL;
+
     list->allocator = allocator;
+
     list->values = arena_alloc(list->allocator, sizeof(LinkedListNode));
-    list->values->value = value;
+    if (list->values == NULL) {
+        list = NULL;
+        return NULL;
+    }
+
     list->values->next = NULL;
+    list->values->value = value;
     list->size = 1;
-    return true;
+
+    return list;
 }
 
 bool linked_list_push(LinkedList *list, uint8_t value)
@@ -78,4 +101,11 @@ bool linked_list_delete(LinkedList *list, size_t index)
 
     list->size--;
     return true;
+}
+
+void linked_list_visualize(const LinkedList *list)
+{
+    for (LinkedListNode *node = list->values; node != NULL; node = node->next)
+        printf("%d ", node->value);
+    printf("\nsize: %zu\n\n", list->size);
 }
