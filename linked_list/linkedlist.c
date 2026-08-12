@@ -13,7 +13,7 @@ struct LinkedListNode_s {
 
 struct LinkedList_s {
     Arena *allocator;
-    LinkedListNode *values;
+    LinkedListNode *head;
     size_t size;
 };
 
@@ -27,14 +27,14 @@ LinkedList *linked_list_new(Arena *allocator, uint8_t value)
     list->allocator = allocator;
 
     // TODO: maybe initialize without any nodes
-    list->values = arena_alloc(list->allocator, sizeof(LinkedListNode));
-    if (list->values == NULL) {
+    list->head = arena_alloc(list->allocator, sizeof(LinkedListNode));
+    if (list->head == NULL) {
         list = NULL;
         return NULL;
     }
 
-    list->values->next = NULL;
-    list->values->value = value;
+    list->head->next = NULL;
+    list->head->value = value;
     list->size = 1;
 
     return list;
@@ -42,14 +42,14 @@ LinkedList *linked_list_new(Arena *allocator, uint8_t value)
 
 bool linked_list_append(LinkedList *list, uint8_t value)
 {
-    if (list == NULL || list->values == NULL) return false;
+    if (list == NULL || list->head == NULL) return false;
 
     LinkedListNode *new_node = arena_alloc(list->allocator, sizeof(LinkedListNode));
     if (new_node == NULL) return false; // TODO: handle better
     new_node->value = value;
     new_node->next = NULL;
     
-    LinkedListNode *last = list->values;
+    LinkedListNode *last = list->head;
     while (last->next != NULL) last = last->next;
     last->next = new_node;
 
@@ -59,16 +59,16 @@ bool linked_list_append(LinkedList *list, uint8_t value)
 
 bool linked_list_prepend(LinkedList *list, uint8_t value)
 {
-    if (list == NULL || list->values == NULL) return false;
+    if (list == NULL || list->head == NULL) return false;
 
     LinkedListNode *new_node = arena_alloc(list->allocator, sizeof(LinkedListNode));
     if (new_node == NULL) return false;
 
-    LinkedListNode *first = list->values;
+    LinkedListNode *first = list->head;
     new_node->next = first;
     new_node->value = value;
 
-    list->values = new_node;
+    list->head = new_node;
     list->size++;
 
     return true;
@@ -76,9 +76,9 @@ bool linked_list_prepend(LinkedList *list, uint8_t value)
 
 static LinkedListNode *linked_list_get_node(const LinkedList *list, size_t index)
 {
-    if (list == NULL || list->values == NULL) return NULL;
+    if (list == NULL || list->head == NULL) return NULL;
     if (index > list->size - 1) return NULL;
-    LinkedListNode *node = list->values;
+    LinkedListNode *node = list->head;
     while (index--) node = node->next;
     return node;
 }
@@ -93,7 +93,7 @@ bool linked_list_get(const LinkedList *list, size_t index, uint8_t *out)
 
 bool linked_list_update(const LinkedList *list, size_t index, uint8_t value)
 {
-    if (list == NULL || list->values == NULL) return false;
+    if (list == NULL || list->head == NULL) return false;
     if (index > list->size - 1) return false;
     LinkedListNode *node = linked_list_get_node(list, index);
     if (node == NULL) return false;
@@ -103,10 +103,10 @@ bool linked_list_update(const LinkedList *list, size_t index, uint8_t value)
 
 bool linked_list_delete(LinkedList *list, size_t index)
 {
-    if (list == NULL || list->values == NULL) return false;
+    if (list == NULL || list->head == NULL) return false;
     if (index > list->size - 1) return false;
     if (index == 0) {
-        list->values = list->values->next;
+        list->head = list->head->next;
         list->size--;
         return true;
     }
@@ -144,14 +144,14 @@ uint8_t linked_list_node_value(const LinkedListNode *node)
 void linked_list_foreach(const LinkedList *list, ForEachFn cb, void *user_data)
 {
     if (list == NULL || cb == NULL) return;
-    for (LinkedListNode *node = list->values; node != NULL; node = node->next)
+    for (LinkedListNode *node = list->head; node != NULL; node = node->next)
         if (!cb(node->value, user_data))
             break;
 }
 
 void linked_list_visualize(const LinkedList *list)
 {
-    for (LinkedListNode *node = list->values; node != NULL; node = node->next)
+    for (LinkedListNode *node = list->head; node != NULL; node = node->next)
         printf("%d ", node->value);
     printf("\nsize: %zu\n\n", list->size);
 }
