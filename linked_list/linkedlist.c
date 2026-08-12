@@ -131,6 +131,11 @@ LinkedListNode *linked_list_next(const LinkedListNode *node)
     return node->next;
 }
 
+size_t linked_list_size(const LinkedList *list)
+{
+    return list->size;
+}
+
 uint8_t linked_list_node_value(const LinkedListNode *node)
 {
     return node->value;

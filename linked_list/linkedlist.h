@@ -28,6 +28,8 @@ LinkedListNode *linked_list_next(const LinkedListNode *node);
 
 uint8_t linked_list_node_value(const LinkedListNode *node);
 
+size_t linked_list_size(const LinkedList *list);
+
 void linked_list_foreach(const LinkedList *list, ForEachFn cb, void *user_data);
 
 void linked_list_visualize(const LinkedList *list);
