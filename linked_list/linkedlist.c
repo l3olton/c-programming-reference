@@ -136,6 +136,14 @@ uint8_t linked_list_node_value(const LinkedListNode *node)
     return node->value;
 }
 
+void linked_list_foreach(const LinkedList *list, ForEachFn cb, void *user_data)
+{
+    if (list == NULL || cb == NULL) return;
+    for (LinkedListNode *node = list->values; node != NULL; node = node->next)
+        if (!cb(node->value, user_data))
+            break;
+}
+
 void linked_list_visualize(const LinkedList *list)
 {
     for (LinkedListNode *node = list->values; node != NULL; node = node->next)
