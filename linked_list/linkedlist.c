@@ -121,6 +121,21 @@ bool linked_list_delete(LinkedList *list, size_t index)
     return true;
 }
 
+LinkedListNode *linked_list_head(const LinkedList *list)
+{
+    return linked_list_get_node(list, 0);
+}
+
+LinkedListNode *linked_list_next(const LinkedListNode *node)
+{
+    return node->next;
+}
+
+uint8_t linked_list_node_value(const LinkedListNode *node)
+{
+    return node->value;
+}
+
 void linked_list_visualize(const LinkedList *list)
 {
     for (LinkedListNode *node = list->values; node != NULL; node = node->next)

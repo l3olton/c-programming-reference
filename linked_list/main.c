@@ -59,5 +59,11 @@ int main(void)
 
     linked_list_visualize(list);
 
+    size_t i = 0;
+    for (LinkedListNode *n = linked_list_head(list); n != NULL; n = linked_list_next(n))
+        linked_list_update(list, i++, linked_list_node_value(n) * 10);
+
+    linked_list_visualize(list);
+
     return 0;
 }
