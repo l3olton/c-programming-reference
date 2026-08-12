@@ -123,7 +123,7 @@ bool linked_list_delete(LinkedList *list, size_t index)
 
 LinkedListNode *linked_list_head(const LinkedList *list)
 {
-    return linked_list_get_node(list, 0);
+    return list->head;
 }
 
 LinkedListNode *linked_list_next(const LinkedListNode *node)
