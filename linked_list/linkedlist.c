@@ -74,7 +74,7 @@ bool linked_list_prepend(LinkedList *list, uint8_t value)
     return true;
 }
 
-LinkedListNode *linked_list_get_node(const LinkedList *list, size_t index)
+static LinkedListNode *linked_list_get_node(const LinkedList *list, size_t index)
 {
     if (list == NULL || list->values == NULL) return NULL;
     if (index > list->size - 1) return NULL;
