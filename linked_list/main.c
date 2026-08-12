@@ -19,7 +19,7 @@ int main(void)
     }
 
     for (uint8_t i = 2; i <= 10; i++) {
-        if (!linked_list_push(list, i)) {
+        if (!linked_list_append(list, i)) {
             printf("Error pushing to linked list\n");
             return 1;
         }

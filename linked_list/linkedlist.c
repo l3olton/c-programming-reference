@@ -40,7 +40,7 @@ LinkedList *linked_list_new(Arena *allocator, uint8_t value)
     return list;
 }
 
-bool linked_list_push(LinkedList *list, uint8_t value)
+bool linked_list_append(LinkedList *list, uint8_t value)
 {
     if (list == NULL || list->values == NULL) return false;
 
