@@ -100,7 +100,7 @@ bool linked_list_update(const LinkedList *list, const size_t index, const uint8_
     return true;
 }
 
-bool linked_list_delete(LinkedList *list, size_t index)
+bool linked_list_delete(LinkedList *list, const size_t index)
 {
     if (list == NULL || list->head == NULL) return false;
     if (index > list->size - 1) return false;
