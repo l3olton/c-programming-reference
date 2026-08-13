@@ -105,17 +105,21 @@ bool linked_list_delete(LinkedList *list, size_t index)
 {
     if (list == NULL || list->head == NULL) return false;
     if (index > list->size - 1) return false;
+    LinkedListNode *delete_node = NULL;
     if (index == 0) {
+        delete_node = list->head;
         list->head = list->head->next;
+        delete_node->next = NULL;
         list->size--;
         return true;
     }
+
     LinkedListNode *prev_node = linked_list_get_node(list, index - 1);
     if (prev_node == NULL) return false;
 
-    LinkedListNode *deleted_node = prev_node->next;
+    delete_node = prev_node->next;
     prev_node->next = prev_node->next->next;
-    deleted_node->next = NULL;
+    delete_node->next = NULL;
 
     list->size--;
     return true;
