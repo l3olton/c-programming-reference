@@ -1,4 +1,5 @@
 #include "linkedlist.h"
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 
@@ -8,14 +9,14 @@ typedef struct {
     uint8_t search_val;
 } Query;
 
-bool sum_all(uint8_t value, void *user_data);
-bool find_largest(uint8_t value, void *user_data);
-bool find(uint8_t value, void *user_data);
+static bool sum_all(uint8_t value, void *user_data);
+static bool find_largest(uint8_t value, void *user_data);
+static bool find(uint8_t value, void *user_data);
 
 int main(void)
 {
     Arena allocator = {0};
-    size_t allocator_size = 1024;
+    const size_t allocator_size = 1024;
     uint8_t allocator_buffer[allocator_size];
     if (!arena_init(&allocator, allocator_buffer, allocator_size)) {
         printf("Error initializing arena allocator\n");
@@ -99,21 +100,21 @@ int main(void)
     return 0;
 }
 
-bool sum_all(uint8_t value, void *user_data)
+bool sum_all(const uint8_t value, void *user_data)
 {
     size_t *total = (size_t *)user_data;
     *total += value;
     return true;
 }
 
-bool find_largest(uint8_t value, void *user_data)
+bool find_largest(const uint8_t value, void *user_data)
 {
     size_t *largest = (size_t *)user_data;
     if (value > *largest) *largest = value;
     return true;
 }
 
-bool find(uint8_t value, void *user_data)
+bool find(const uint8_t value, void *user_data)
 {
     Query *query = (Query *)user_data;
     if (value == query->search_val) {

@@ -1,6 +1,5 @@
 #include "linkedlist.h"
 #include "../arena_allocator/arena.h" // TODO: dont use relative path
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -17,7 +16,7 @@ struct LinkedList_s {
     size_t size;
 };
 
-LinkedList *linked_list_new(Arena *allocator, uint8_t value)
+LinkedList *linked_list_new(Arena *allocator, const uint8_t value)
 {
     if (allocator == NULL) return NULL;
 
@@ -40,7 +39,7 @@ LinkedList *linked_list_new(Arena *allocator, uint8_t value)
     return list;
 }
 
-bool linked_list_append(LinkedList *list, uint8_t value)
+bool linked_list_append(LinkedList *list, const uint8_t value)
 {
     if (list == NULL || list->head == NULL) return false;
 
@@ -57,7 +56,7 @@ bool linked_list_append(LinkedList *list, uint8_t value)
     return true;
 }
 
-bool linked_list_prepend(LinkedList *list, uint8_t value)
+bool linked_list_prepend(LinkedList *list, const uint8_t value)
 {
     if (list == NULL || list->head == NULL) return false;
 
@@ -85,13 +84,13 @@ static LinkedListNode *linked_list_get_node(const LinkedList *list, size_t index
 
 bool linked_list_get(const LinkedList *list, size_t index, uint8_t *out)
 {
-    LinkedListNode *node = linked_list_get_node(list, index);
+    const LinkedListNode *node = linked_list_get_node(list, index);
     if (node == NULL) return false;
     *out = node->value;
     return true;
 }
 
-bool linked_list_update(const LinkedList *list, size_t index, uint8_t value)
+bool linked_list_update(const LinkedList *list, const size_t index, const uint8_t value)
 {
     if (list == NULL || list->head == NULL) return false;
     if (index > list->size - 1) return false;
@@ -145,17 +144,17 @@ uint8_t linked_list_node_value(const LinkedListNode *node)
     return node->value;
 }
 
-void linked_list_foreach(const LinkedList *list, ForEachFn cb, void *user_data)
+void linked_list_foreach(const LinkedList *list, const ForEachFn cb, void *user_data)
 {
     if (list == NULL || cb == NULL) return;
-    for (LinkedListNode *node = list->head; node != NULL; node = node->next)
+    for (const LinkedListNode *node = list->head; node != NULL; node = node->next)
         if (!cb(node->value, user_data))
             break;
 }
 
 void linked_list_visualize(const LinkedList *list)
 {
-    for (LinkedListNode *node = list->head; node != NULL; node = node->next)
+    for (const LinkedListNode *node = list->head; node != NULL; node = node->next)
         printf("%d ", node->value);
     printf("\nsize: %zu\n\n", list->size);
 }
