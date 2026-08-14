@@ -10,6 +10,8 @@ typedef struct LinkedList_s LinkedList;
 
 typedef bool (*ForEachFn)(uint8_t value, void *user_data);
 
+typedef bool (*ForEachNodeFn)(const LinkedListNode *node, void *user_data);
+
 LinkedList *linked_list_new(Arena *allocator, uint8_t value);
 
 bool linked_list_append(LinkedList *list, uint8_t value);
@@ -35,6 +37,8 @@ uint8_t linked_list_node_value(const LinkedListNode *node);
 size_t linked_list_size(const LinkedList *list);
 
 void linked_list_foreach(const LinkedList *list, ForEachFn cb, void *user_data);
+
+void linked_list_foreach_node(const LinkedList *list, const ForEachNodeFn cb, void *user_data);
 
 void linked_list_visualize(const LinkedList *list);
 

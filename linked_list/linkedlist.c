@@ -185,6 +185,19 @@ void linked_list_foreach(const LinkedList *list, const ForEachFn cb, void *user_
             break;
 }
 
+void linked_list_foreach_node(const LinkedList *list, const ForEachNodeFn cb, void *user_data)
+{
+    if (list == NULL || cb == NULL) return;
+
+    const LinkedListNode *node = list->head;
+    while (node != NULL) {
+        const LinkedListNode *next = node->next;
+        if (!cb(node, user_data))
+            break;
+        node = next;
+    }
+}
+
 void linked_list_visualize(const LinkedList *list)
 {
     for (const LinkedListNode *node = list->head; node != NULL; node = node->next)
