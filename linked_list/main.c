@@ -102,21 +102,21 @@ int main(void)
 
 bool sum_all(const uint8_t value, void *user_data)
 {
-    size_t *total = (size_t *)user_data;
+    size_t *total = user_data;
     *total += value;
     return true;
 }
 
 bool find_largest(const uint8_t value, void *user_data)
 {
-    size_t *largest = (size_t *)user_data;
+    size_t *largest = user_data;
     if (value > *largest) *largest = value;
     return true;
 }
 
 bool find(const uint8_t value, void *user_data)
 {
-    Query *query = (Query *)user_data;
+    Query *query = user_data;
     if (value == query->search_val) {
         query->result_index = query->start_index;
         return false;
