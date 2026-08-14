@@ -16,7 +16,7 @@ static bool find(uint8_t value, void *user_data);
 int main(void)
 {
     Arena allocator = {0};
-    const size_t allocator_size = 1024;
+    const size_t allocator_size = 1024 * 256; // 256 KiB
     uint8_t allocator_buffer[allocator_size];
     if (!arena_init(&allocator, allocator_buffer, allocator_size)) {
         printf("Error initializing arena allocator\n");
