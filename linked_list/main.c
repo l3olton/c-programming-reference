@@ -1,4 +1,5 @@
 #include "linkedlist.h"
+#include <math.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -12,6 +13,7 @@ typedef struct {
 static bool sum_all(uint8_t value, void *user_data);
 static bool find_largest(uint8_t value, void *user_data);
 static bool find(uint8_t value, void *user_data);
+static bool delete_node(const LinkedListNode *node, void *user_data);
 
 int main(void)
 {
@@ -97,6 +99,30 @@ int main(void)
     if (query2.result_index < 0)
         printf("value 51 not found in list\n");
 
+    printf("arena length: %zu, offset: %zu\n", allocator.length, allocator.offset);
+
+    LinkedList *list2 = linked_list_new(&allocator, 1);
+
+    for (i = 1; i < 10000; i++)
+        linked_list_append(list2, 1);
+
+    linked_list_visualize(list2);
+
+    linked_list_foreach_node(list2, delete_node, list2);
+
+    linked_list_visualize(list2);
+
+    double_t used = (double_t)allocator.offset / (double_t)allocator.length * 100;
+    printf("arena length: %zu, offset: %zu, %f%%\n", allocator.length, allocator.offset, used);
+
+    for (i = 1; i < 10000; i++)
+        linked_list_append(list2, 1);
+
+    linked_list_visualize(list2);
+
+    used = (double_t)allocator.offset / (double_t)allocator.length * 100;
+    printf("arena length: %zu, offset: %zu, %f%%\n", allocator.length, allocator.offset, used);
+
     return 0;
 }
 
@@ -122,5 +148,13 @@ bool find(const uint8_t value, void *user_data)
         return false;
     }
     query->start_index++;
+    return true;
+}
+
+bool delete_node(const LinkedListNode *node, void *user_data)
+{
+    LinkedList *list = user_data;
+    if (node != linked_list_head(list))
+        linked_list_node_delete(list, node); // TODO: should check failure
     return true;
 }
