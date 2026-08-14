@@ -22,6 +22,8 @@ bool linked_list_get(const LinkedList *list, size_t index, uint8_t *out);
 
 bool linked_list_update(const LinkedList *list, size_t index, uint8_t value);
 
+bool linked_list_node_update(LinkedListNode *node, uint8_t value);
+
 bool linked_list_delete(LinkedList *list, size_t index);
 
 LinkedListNode *linked_list_next(const LinkedListNode *node);

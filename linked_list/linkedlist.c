@@ -100,6 +100,13 @@ bool linked_list_update(const LinkedList *list, const size_t index, const uint8_
     return true;
 }
 
+bool linked_list_node_update(LinkedListNode *node, uint8_t value)
+{
+    if (node == NULL) return false;
+    node->value = value;
+    return true;
+}
+
 bool linked_list_delete(LinkedList *list, const size_t index)
 {
     if (list == NULL || list->head == NULL) return false;
