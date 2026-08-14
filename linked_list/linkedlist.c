@@ -131,6 +131,32 @@ bool linked_list_delete(LinkedList *list, const size_t index)
     return true;
 }
 
+bool linked_list_node_delete(LinkedList *list, const LinkedListNode *node)
+{
+    if (list == NULL || node == NULL) return false;
+
+    LinkedListNode *delete_node = NULL;
+
+    if (node == list->head) {
+        delete_node = list->head;
+        list->head = list->head->next;
+        delete_node->next = NULL;
+        list->size--;
+        return true;
+    }
+
+    for (LinkedListNode *n = list->head; n != NULL; n = n->next)
+        if (n->next == node) {
+            delete_node = n->next;
+            n->next = n->next->next;
+            delete_node = NULL;
+            list->size--;
+            return true;
+        }
+
+    return false;
+}
+
 LinkedListNode *linked_list_head(const LinkedList *list)
 {
     return list->head;
