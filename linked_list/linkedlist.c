@@ -13,6 +13,7 @@ struct LinkedListNode_s {
 struct LinkedList_s {
     Arena *allocator;
     LinkedListNode *head;
+    LinkedListNode *free_nodes; // maybe better as global node pool, that can be passed to multiple lists
     size_t size;
 };
 
@@ -39,11 +40,25 @@ LinkedList *linked_list_new(Arena *allocator, const uint8_t value)
     return list;
 }
 
+static LinkedListNode *get_free_node(LinkedList *list)
+{
+    if (list == NULL || list->free_nodes == NULL) return NULL;
+
+    LinkedListNode *free_node = list->free_nodes;
+    list->free_nodes = list->free_nodes->next;
+    free_node->next = NULL;
+
+    return free_node;
+}
+
 bool linked_list_append(LinkedList *list, const uint8_t value)
 {
     if (list == NULL || list->head == NULL) return false;
 
-    LinkedListNode *new_node = arena_alloc(list->allocator, sizeof(LinkedListNode));
+    LinkedListNode *new_node = get_free_node(list);
+    if (new_node == NULL)
+        new_node = arena_alloc(list->allocator, sizeof(LinkedListNode));
+
     if (new_node == NULL) return false; // TODO: handle better
     new_node->value = value;
     new_node->next = NULL;
@@ -60,7 +75,10 @@ bool linked_list_prepend(LinkedList *list, const uint8_t value)
 {
     if (list == NULL || list->head == NULL) return false;
 
-    LinkedListNode *new_node = arena_alloc(list->allocator, sizeof(LinkedListNode));
+    LinkedListNode *new_node = get_free_node(list);
+    if (new_node == NULL)
+        new_node = arena_alloc(list->allocator, sizeof(LinkedListNode));
+
     if (new_node == NULL) return false;
 
     LinkedListNode *first = list->head;
@@ -107,6 +125,25 @@ bool linked_list_node_update(LinkedListNode *node, uint8_t value)
     return true;
 }
 
+static bool free_node(LinkedList *list, LinkedListNode *node)
+{
+    if (list == NULL || node == NULL) return false;
+
+    node->value = 0; // TODO: use NULL when using void *
+    node->next = NULL;
+
+    if (!list->free_nodes) {
+        list->free_nodes = node;
+        return true;
+    }
+
+    LinkedListNode *last = list->free_nodes;
+    while (last->next) last = last->next;
+    last->next = node;
+
+    return true;
+}
+
 bool linked_list_delete(LinkedList *list, const size_t index)
 {
     if (list == NULL || list->head == NULL) return false;
@@ -115,7 +152,7 @@ bool linked_list_delete(LinkedList *list, const size_t index)
     if (index == 0) {
         delete_node = list->head;
         list->head = list->head->next;
-        delete_node->next = NULL;
+        free_node(list, delete_node);
         list->size--;
         return true;
     }
@@ -125,7 +162,7 @@ bool linked_list_delete(LinkedList *list, const size_t index)
 
     delete_node = prev_node->next;
     prev_node->next = prev_node->next->next;
-    delete_node->next = NULL;
+    free_node(list, delete_node);
 
     list->size--;
     return true;
@@ -140,7 +177,7 @@ bool linked_list_node_delete(LinkedList *list, const LinkedListNode *node)
     if (node == list->head) {
         delete_node = list->head;
         list->head = list->head->next;
-        delete_node->next = NULL;
+        free_node(list, delete_node);
         list->size--;
         return true;
     }
@@ -149,7 +186,7 @@ bool linked_list_node_delete(LinkedList *list, const LinkedListNode *node)
         if (n->next == node) {
             delete_node = n->next;
             n->next = n->next->next;
-            delete_node = NULL;
+            free_node(list, delete_node);
             list->size--;
             return true;
         }
@@ -202,5 +239,9 @@ void linked_list_visualize(const LinkedList *list)
 {
     for (const LinkedListNode *node = list->head; node != NULL; node = node->next)
         printf("%d ", node->value);
-    printf("\nsize: %zu\n\n", list->size);
+    printf("\nsize: %zu\n", list->size);
+    size_t free_length = 0;
+    for (const LinkedListNode *free = list->free_nodes; free != NULL; free = free->next)
+        free_length++;
+    printf("free list length: %zu\n\n", free_length);
 }
