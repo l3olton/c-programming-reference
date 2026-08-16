@@ -13,9 +13,10 @@ struct LinkedListNode_s {
 struct LinkedList_s {
     Arena *allocator;
     LinkedListNode *head;
-    LinkedListNode *free_nodes; // maybe better as global node pool, that can be passed to multiple lists
     size_t size;
 };
+
+static LinkedListNode *free_nodes = NULL;
 
 LinkedList *linked_list_new(Arena *allocator, const uint8_t value)
 {
@@ -42,10 +43,10 @@ LinkedList *linked_list_new(Arena *allocator, const uint8_t value)
 
 static LinkedListNode *get_free_node(LinkedList *list)
 {
-    if (list == NULL || list->free_nodes == NULL) return NULL;
+    if (list == NULL || free_nodes == NULL) return NULL;
 
-    LinkedListNode *free_node = list->free_nodes;
-    list->free_nodes = list->free_nodes->next;
+    LinkedListNode *free_node = free_nodes;
+    free_nodes = free_nodes->next;
     free_node->next = NULL;
 
     return free_node;
@@ -132,12 +133,12 @@ static bool free_node(LinkedList *list, LinkedListNode *node)
     node->value = 0; // TODO: use NULL when using void *
     node->next = NULL;
 
-    if (!list->free_nodes) {
-        list->free_nodes = node;
+    if (!free_nodes) {
+        free_nodes = node;
         return true;
     }
 
-    LinkedListNode *last = list->free_nodes;
+    LinkedListNode *last = free_nodes;
     while (last->next) last = last->next;
     last->next = node;
 
@@ -241,7 +242,7 @@ void linked_list_visualize(const LinkedList *list)
         printf("%d ", node->value);
     printf("\nsize: %zu\n", list->size);
     size_t free_length = 0;
-    for (const LinkedListNode *free = list->free_nodes; free != NULL; free = free->next)
+    for (const LinkedListNode *free = free_nodes; free != NULL; free = free->next)
         free_length++;
     printf("free list length: %zu\n\n", free_length);
 }

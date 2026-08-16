@@ -116,9 +116,9 @@ int main(void)
     printf("arena length: %zu, offset: %zu, %f%%\n", allocator.length, allocator.offset, used);
 
     for (i = 1; i < 10000; i++)
-        linked_list_append(list2, 1);
+        linked_list_append(list, 1);
 
-    linked_list_visualize(list2);
+    linked_list_visualize(list);
 
     used = (double_t)allocator.offset / (double_t)allocator.length * 100;
     printf("arena length: %zu, offset: %zu, %f%%\n", allocator.length, allocator.offset, used);
