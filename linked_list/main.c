@@ -10,9 +10,9 @@ typedef struct {
     uint8_t search_val;
 } Query;
 
-static bool sum_all(uint8_t value, void *user_data);
-static bool find_largest(uint8_t value, void *user_data);
-static bool find(uint8_t value, void *user_data);
+static bool sum_all(void *value, void *user_data);
+static bool find_largest(void *value, void *user_data);
+static bool find(void *value, void *user_data);
 static bool delete_node(const LinkedListNode *node, void *user_data);
 
 int main(void)
@@ -25,14 +25,15 @@ int main(void)
         return 1;
     }
 
-    LinkedList *list = linked_list_new(&allocator, 1);
+    uint8_t first = 1;
+    LinkedList *list = linked_list_new(&allocator, &first);
     if (!list) {
         printf("Error initializing linked list\n");
         return 1;
     }
 
     for (uint8_t i = 2; i <= 10; i++) {
-        if (!linked_list_append(list, i)) {
+        if (!linked_list_append(list, &i)) {
             printf("Error pushing to linked list\n");
             return 1;
         }
@@ -41,12 +42,13 @@ int main(void)
 
     linked_list_visualize(list);
 
-    uint8_t val3;
-    bool success = linked_list_get(list, 2, &val3);
-    if (success) printf("3rd node value: %d\n", val3);
+    // TODO: probably wont work
+    uint8_t *val3 = NULL;
+    bool success = linked_list_get(list, 2, (void *)&val3);
+    if (success) printf("3rd node value: %d\n", *val3);
 
-    uint8_t val20;
-    success = linked_list_get(list, 20, &val20);
+    uint8_t *val20 = NULL;
+    success = linked_list_get(list, 20, (void *)val20);
     if (!success) printf("index 20 is out of bounds\n");
 
     linked_list_visualize(list);
@@ -60,21 +62,27 @@ int main(void)
 
     linked_list_visualize(list);
 
-    if (linked_list_update(list, 4, 12))
+    uint8_t put4 = 12;
+    if (linked_list_update(list, 4, &put4))
         printf("item at index 4 updated\n");
 
-    if (!linked_list_update(list, 10, 20))
+    uint8_t put10 = 20;
+    if (!linked_list_update(list, 10, &put10))
         printf("index 10 out of bounds\n");
 
     linked_list_visualize(list);
 
-    if (!linked_list_prepend(list, 1)) printf("Error prepending to list\n");
+    uint8_t pre1 = 1;
+    if (!linked_list_prepend(list, &pre1)) printf("Error prepending to list\n");
 
     linked_list_visualize(list);
 
     size_t i = 0;
-    for (LinkedListNode *n = linked_list_head(list); n != NULL; n = linked_list_next(n))
-        linked_list_update(list, i++, linked_list_node_value(n) * 10);
+    for (LinkedListNode *n = linked_list_head(list); n != NULL; n = linked_list_next(n)) {
+        uint8_t *value = linked_list_node_value(n);
+        uint8_t update_val = *value * 10;
+        linked_list_update(list, i++, &update_val);
+    }
 
     linked_list_visualize(list);
 
@@ -101,10 +109,11 @@ int main(void)
 
     printf("arena length: %zu, offset: %zu\n", allocator.length, allocator.offset);
 
-    LinkedList *list2 = linked_list_new(&allocator, 1);
+    uint8_t first_val = 1;
+    LinkedList *list2 = linked_list_new(&allocator, &first_val);
 
     for (i = 1; i < 10000; i++)
-        linked_list_append(list2, 1);
+        linked_list_append(list2, &i);
 
     linked_list_visualize(list2);
 
@@ -116,7 +125,7 @@ int main(void)
     printf("arena length: %zu, offset: %zu, %f%%\n", allocator.length, allocator.offset, used);
 
     for (i = 1; i < 10000; i++)
-        linked_list_append(list, 1);
+        linked_list_append(list, &i);
 
     linked_list_visualize(list);
 
@@ -126,24 +135,27 @@ int main(void)
     return 0;
 }
 
-bool sum_all(const uint8_t value, void *user_data)
+bool sum_all(void *value, void *user_data)
 {
+    uint8_t *val = value;
     size_t *total = user_data;
-    *total += value;
+    *total += *val;
     return true;
 }
 
-bool find_largest(const uint8_t value, void *user_data)
+bool find_largest(void *value, void *user_data)
 {
+    uint8_t *val = value;
     size_t *largest = user_data;
-    if (value > *largest) *largest = value;
+    if (*val > *largest) *largest = *val;
     return true;
 }
 
-bool find(const uint8_t value, void *user_data)
+bool find(void *value, void *user_data)
 {
+    uint8_t *val = value;
     Query *query = user_data;
-    if (value == query->search_val) {
+    if (*val == query->search_val) {
         query->result_index = query->start_index;
         return false;
     }

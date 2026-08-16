@@ -5,8 +5,7 @@
 #include <string.h>
 
 struct LinkedListNode_s {
-    // TODO: make generic
-    uint8_t value;
+    void *value;
     LinkedListNode *next;
 };
 
@@ -18,7 +17,7 @@ struct LinkedList_s {
 
 static LinkedListNode *free_nodes = NULL;
 
-LinkedList *linked_list_new(Arena *allocator, const uint8_t value)
+LinkedList *linked_list_new(Arena *allocator, void *value)
 {
     if (allocator == NULL) return NULL;
 
@@ -52,7 +51,7 @@ static LinkedListNode *get_free_node(LinkedList *list)
     return free_node;
 }
 
-bool linked_list_append(LinkedList *list, const uint8_t value)
+bool linked_list_append(LinkedList *list, void *value)
 {
     if (list == NULL || list->head == NULL) return false;
 
@@ -72,7 +71,7 @@ bool linked_list_append(LinkedList *list, const uint8_t value)
     return true;
 }
 
-bool linked_list_prepend(LinkedList *list, const uint8_t value)
+bool linked_list_prepend(LinkedList *list, void *value)
 {
     if (list == NULL || list->head == NULL) return false;
 
@@ -101,7 +100,7 @@ static LinkedListNode *linked_list_get_node(const LinkedList *list, size_t index
     return node;
 }
 
-bool linked_list_get(const LinkedList *list, size_t index, uint8_t *out)
+bool linked_list_get(const LinkedList *list, size_t index, void **out)
 {
     const LinkedListNode *node = linked_list_get_node(list, index);
     if (node == NULL) return false;
@@ -109,7 +108,7 @@ bool linked_list_get(const LinkedList *list, size_t index, uint8_t *out)
     return true;
 }
 
-bool linked_list_update(const LinkedList *list, const size_t index, const uint8_t value)
+bool linked_list_update(const LinkedList *list, const size_t index, void *value)
 {
     if (list == NULL || list->head == NULL) return false;
     if (index > list->size - 1) return false;
@@ -119,7 +118,7 @@ bool linked_list_update(const LinkedList *list, const size_t index, const uint8_
     return true;
 }
 
-bool linked_list_node_update(LinkedListNode *node, uint8_t value)
+bool linked_list_node_update(LinkedListNode *node, void *value)
 {
     if (node == NULL) return false;
     node->value = value;
@@ -210,7 +209,7 @@ size_t linked_list_size(const LinkedList *list)
     return list->size;
 }
 
-uint8_t linked_list_node_value(const LinkedListNode *node)
+void *linked_list_node_value(const LinkedListNode *node)
 {
     return node->value;
 }
@@ -236,10 +235,13 @@ void linked_list_foreach_node(const LinkedList *list, const ForEachNodeFn cb, vo
     }
 }
 
+// TODO: needs to be defined by user for their list
 void linked_list_visualize(const LinkedList *list)
 {
-    for (const LinkedListNode *node = list->head; node != NULL; node = node->next)
-        printf("%d ", node->value);
+    for (const LinkedListNode *node = list->head; node != NULL; node = node->next) {
+        uint8_t *val = node->value;
+        printf("%d ", *val);
+    }
     printf("\nsize: %zu\n", list->size);
     size_t free_length = 0;
     for (const LinkedListNode *free = free_nodes; free != NULL; free = free->next)
