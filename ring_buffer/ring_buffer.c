@@ -32,6 +32,12 @@ bool ring_buf_push(RingBuffer *rb, uint8_t byte)
     return true;
 }
 
+void ring_buf_reset(RingBuffer *rb)
+{
+    rb->write_index = 0;
+    rb->read_index = 0;
+}
+
 bool ring_buf_pop(RingBuffer *rb, uint8_t *output)
 {
     if (ring_buf_is_empty(rb)) return false;

@@ -17,6 +17,8 @@ void ring_buf_init(RingBuffer *rb, uint8_t *buffer, size_t size);
 
 bool ring_buf_push(RingBuffer *rb, uint8_t byte);
 
+void ring_buf_reset(RingBuffer *rb);
+
 bool ring_buf_pop(RingBuffer *rb, uint8_t *output);
 
 void ring_buf_visualize(const RingBuffer *rb);

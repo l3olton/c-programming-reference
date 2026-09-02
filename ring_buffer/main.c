@@ -43,5 +43,16 @@ int main(void)
     ring_buf_visualize(&rb);
     putchar('\n');
 
+    ring_buf_push(&rb, 'h');
+    ring_buf_push(&rb, 'i');
+    ring_buf_push(&rb, '!');
+    ring_buf_push(&rb, 'H');
+    ring_buf_push(&rb, 'I');
+    ring_buf_push(&rb, '!');
+
+    ring_buf_visualize(&rb);
+    ring_buf_reset(&rb);
+    ring_buf_visualize(&rb);
+
     return 0;
 }
