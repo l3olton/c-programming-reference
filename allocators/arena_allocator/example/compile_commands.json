@@ -1,0 +1,15 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-I../../../bin/include",
+      "-o",
+      "example.out",
+      "main.c"
+    ],
+    "directory": "/home/tb/Documents/c-programming-reference/allocators/arena_allocator/example",
+    "file": "/home/tb/Documents/c-programming-reference/allocators/arena_allocator/example/main.c",
+    "output": "/home/tb/Documents/c-programming-reference/allocators/arena_allocator/example/example.out"
+  }
+]

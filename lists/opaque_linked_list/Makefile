@@ -4,6 +4,8 @@ DEBUGFLAGS ?= -g -O0 -fsanitize=address
 
 ARENA = $(abspath ../arena_allocator)
 
+INCLUDES = 
+
 SOURCES = main.c linkedlist.c $(ARENA)/arena.c
 
 build: linkedlist.out
